@@ -1,25 +1,32 @@
-#https://platform.openai.com/account/api-keys
-#Go to this link and make your own api key and paste it in 5th line
+import requests
 
-import openai
-openai.api_key = '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'
-model_engine = "text-davinci-003"
-prompt = input("🤖 How can I help you?\n")
+def search(query):
+    url = "https://www.googleapis.com/customsearch/v1"  # Google Custom Search API URL
+    api_key = "AIzaSyArmR0VWxfyy5urqsX0nI-Ngb8L3iLGVe8"  # Replace with your own API key
+    cx = "7647ac75be2b045ea"  # Replace with your own search engine ID
+    params = {
+        "key": api_key,
+        "cx": cx,
+        "q": query
+    }
+    response = requests.get(url, params=params)
+    data = response.json()
+    return data
 
-while prompt.lower() not in ("no", "n", "no!", "you can't", "you cant", "nothing"):
-    
-    completion = openai.Completion.create(
-        engine=model_engine,
-        prompt=prompt,
-        max_tokens=1024,
-        n=1,
-        stop=None,
-        temperature=0.5,
-    )
+def get_answer(query):
+    data = search(query)
+    if "items" in data and len(data["items"]) > 0:
+        top_result = data["items"][0]
+        if "title" in top_result and "snippet" in top_result:
+            title = top_result["title"]
+            snippet = top_result["snippet"]
+            return f"{title}\n\n{snippet}"
+    return "Sorry, I couldn't find an answer to your question."
 
-    response = completion.choices[0].text
-    print(f'🤖 {response}')
-    
-    prompt = input("🤖 What else can I help you with?\n")
-
-print("🤖...")
+# Main loop
+while True:
+    user_input = input("User: ")
+    if user_input.lower() == "exit":
+        break
+    answer = get_answer(user_input)
+    print("Chatbot:", answer)
