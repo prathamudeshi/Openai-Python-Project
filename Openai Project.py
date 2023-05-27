@@ -3,10 +3,10 @@ import requests
 def search(query):
     url = "https://www.googleapis.com/customsearch/v1" #Search API url
     api_key = "AIzaSyArmR0VWxfyy5urqsX0nI-Ngb8L3iLGVe8"  #API key
-    search_engine_id = "7647ac75be2b045ea"           #Search engine id
+    cx = "7647ac75be2b045ea"           #Search engine id
     params = {
         "key": api_key,
-        "search_engine_id": search_engine_id,
+        "cx": cx,
         "q": query
     }
     response = requests.get(url, params=params)
@@ -29,4 +29,4 @@ while True:
     if user_input.lower() == "exit":
         break
     answer = get_answer(user_input)
-    print("Chatbot:", answer)
+    print("KnowitAll:", answer)
